@@ -19,35 +19,6 @@
 # Max Hope <maxhopeusers.noreply.github.com>
 #
 
-# Create dirs in chroot path
-define create_subdirs ($path, $dirs) {
-  $dirs.sort.each |$index, $dir| {
-#    exec { "mkdir -p ${path}${dir}":
-#      command => "mkdir -p ${path}${dir}",
-#      path    => ['/bin', '/usr/bin'], 
-#    } 
-
-    file {"${path}${dir}":
-      ensure => directory,
-      owner  => 'root',
-      group  => 'root',
-    }
-  }
-}
-
-# Copy contents to chroot path
-define copy_content_to_chroot($path, $contents) {
-  $contents.each |$index, $content| {
-    file {"${path}${content}":
-      ensure  => present,
-      owner   => 'root',
-      group   => 'root',
-      content => file($content),
-      recurse => true,
-    }
-  }
-}
-
 # chroot class
 class chroot(
   $ensure     = present,
@@ -72,7 +43,7 @@ class chroot(
         owner  => 'root',
         group  => 'root',
       }->
-      create_subdirs{'create_subdirs':
+      chroot::create_subdirs{'create_subdirs':
         path => $path,
         dirs => $contents,
       }->
@@ -83,7 +54,7 @@ class chroot(
         group   => 'root',
         mode    => '0700',
       }->
-      copy_content_to_chroot{'copy_content':
+      chroot::copy_content_to_chroot{'copy_content':
         path     => $path,
         contents => $copy,
       }->
