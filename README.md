@@ -35,27 +35,27 @@ I strongly recommend you to read about the chroot command. Type 'man chroot' in 
 
 You can create a chroot environment by calling the chroot class:
 
-   class {'::chroot': 
-     $ensure     = present,
-     $path       = '/opt/mychroot',
-     $contents   = ['/bin', '/usr/bin','/usr/lib', '/usr/lib64', '/etc', '/dev', '/lib', '/lib64'],
-     $copy       = ['/etc/group', '/etc/passwd', '/etc/resolv.conf', '/etc/hosts'],
-     $exec       = '/usr/bin/cat',
-     $userspec   = 'root:root',
-     $groups     = '',
-   }
+    class {'::chroot': 
+      $ensure     = present,
+      $path       = '/opt/mychroot',
+      $contents   = ['/bin', '/usr/bin','/usr/lib', '/usr/lib64', '/etc', '/dev', '/lib', '/lib64'],
+      $copy       = ['/etc/group', '/etc/passwd', '/etc/resolv.conf', '/etc/hosts'],
+      $exec       = '/usr/bin/cat',
+      $userspec   = 'root:root',
+      $groups     = '',
+    }
 
 This will create a complete chroot environment and create all folders and files specified by you and also copy you executables´dependencies into the chroot environment.
 
 If you already have a complete chroot environment, then you can use the chroot type:
 
-   chroot {'mychroot':
-      ensure     => present,
-      path       => /path/to/chroot,
-      userspec   => 'root:root',
-      groups     => '',
-      exec       => '/usr/bin/cat',
-    }
+    chroot {'mychroot':
+       ensure     => present,
+       path       => /path/to/chroot,
+       userspec   => 'root:root',
+       groups     => '',
+       exec       => '/usr/bin/cat',
+     }
 
 ## Class parameters
 
