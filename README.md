@@ -61,17 +61,17 @@ If you already have a complete chroot environment, then you can use the chroot t
 
   * ensure   
     Setup or uninstall the chroot environment. Accepted values: [present | absent]
-  * path
+  * path   
     The path to your chroot environment. Ex: /opt/mychroot
-  * contents 
+  * contents    
     The folders to be created in your chroot environment. Accepted value: string array. Ex: ['/bin', '/usr/bin','/usr/lib', '/etc', '/dev', '/lib']
-  * copy     
+  * copy    
     The files to be copied to your chroot environment. Accepted value: string array. Ex: ['/etc/group', '/etc/passwd', '/etc/resolv.conf', '/etc/hosts'],
-  * exec 
+  * exec     
     The path to the executable to be run in the chroot environment. Ex:'/usr/bin/bash'
-  * userspec
+  * userspec    
     The userspec to be used when running the chroot environment. Ex: 'root:root',
-  * groups  
+  * groups    
     The additional groups to be used when running the executable in the chroot environment. Accepted value: string array. Ex: ['wheel']
 
 ## Limitations
