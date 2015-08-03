@@ -1,0 +1,35 @@
+#!/bin/bash
+
+export CHROOT_PATH=<%= @path %>
+
+cp /lib/libnss* /lib/libnsl* /lib/ld-linux-*.so* /lib/libresolv* /lib/libgcc_s.so* $CHROOT_PATH/usr/lib/
+
+cp $(ldd <%= @exec %> | awk '{print $3}'|grep "^/") $CHROOT_PATH/usr/lib/
+
+#sh -c "grep --color=never ^root /etc/passwd > $CHROOT_PATH/etc/passwd"
+#sh -c "grep --color=never ^root /etc/group > $CHROOT_PATH/etc/group"
+
+
+if [ ! -e $CHROOT_PATH/dev/random ]; then
+    mknod -m 644 $CHROOT_PATH/dev/random c 1 8
+fi
+if [ ! -e $CHROOT_PATH/dev/urandom ]; then
+    mknod -m 644 $CHROOT_PATH/dev/urandom c 1 9
+fi
+if [ ! -e $CHROOT_PATH/dev/null ]; then
+    mknod -m 644 $CHROOT_PATH/dev/null c 1 3
+fi
+
+
+if [[ "$(uname -m)" == "x86_64" ]]; then
+  cp /usr/lib/ld-linux-x86-64.so* $CHROOT_PATH/usr/lib/.
+  cp /lib64/ld-linux-x86-64.so.* $CHROOT_PATH/lib64/.
+  
+  if [ ! -e $CHROOT_PATH/usr/lib64 ]; then
+    ln -sr /usr/lib64 $CHROOT_PATH/lib64
+  fi
+  if [ ! -e $CHROOT_PATH/usr/lib64 ]; then
+    ln -s $CHROOT_PATH/usr/lib ${CHROOT_PATH}/usr/lib64
+  fi
+fi
+

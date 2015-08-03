@@ -1,0 +1,104 @@
+# lib/puppet/provider/chroot/ruby.rb
+require 'fileutils'
+
+Puppet::Type.type(:chroot).provide(:ruby) do
+  desc "chroot creation."
+
+  commands :chroot => "/usr/bin/chroot"
+  commands :mknod  => "/usr/bin/mknod"
+  commands :cp     => "/usr/bin/cp"
+
+  def name
+    resource[:name]
+  end
+
+  def path
+    resource[:path]
+  end
+
+  def userspec
+    resource[:userspec]
+  end
+ 
+  def groups
+    resource[:groups]
+  end
+
+  def exec
+    resource[:exec]
+  end
+  
+  def create
+    puts "creating chroot directory " + resource[:path]
+    # create the chroot folder...
+    FileUtils::mkdir_p path
+    
+   # create the chroot sub folders...
+    contents_array = contents
+    contents_array.each do |p| 
+      if File.directory? p
+        puts p + " is a directory" 
+        FileUtils::mkdir_p (path + p)
+      end
+    end    
+
+    # copy the files to the chroot environment...
+    copy_array = copy
+    copy_array.each do |p|
+      if File.file? p
+        puts p + " is a file and is beeing copied to " + path+p
+        FileUtils.copy_file(p, path + p)
+      elsif File.directory? p
+        puts "copy " + p + " to " + path
+        FileUtils.copy_entry(p, path)
+      end 
+
+      # copy the executable...
+      if File.file? exec
+        FileUtils.copy_file(exec, path + exec)
+      end
+    end
+
+    # copy shared libraries used by the executable...
+    #cp $(ldd /usr/bin/tor | awk '{print $3}'|grep "^/") $TORCHROOT/usr/lib/
+    cp(["$(/usr/bin/ldd " + exec + " | awk \'{print $3}\'|grep \"^/\") ", path + '/usr/lib/'])   
+
+    # create filesystem nodes...
+    mknod(['-m', '644', path+'/dev/random', 'c', '1', '8']) 
+    mknod(['-m', '644', path+'/dev/urandom', 'c', '1', '9']) 
+    mknod(['-m', '644', path+'/dev/null', 'c', '1', '3']) 
+  end
+
+  def destroy
+    puts ("Removing chroot directory " + path)
+    FileUtils.rm_rf path
+  end
+
+  def exists?
+    contents_array = contents
+    contents_array.each { |x| 
+      unless File.directory? path+x
+        destroy  
+        puts path + x 
+        return false
+      end
+    }
+    exists = true 
+
+    unless File.file? path + exec
+      destroy
+      return false
+    end
+
+    copy_array = copy
+    copy_array.each do |p|
+      unless File.file? path + p
+        exists = false
+        destroy      #if it exists or if any changes in chroot environment are detected
+        break 
+      end
+    end
+    puts "exists: " + exists.to_s
+    exists
+  end
+end
