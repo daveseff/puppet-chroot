@@ -2,13 +2,27 @@
   "name": "maxhope-chroot",
   "version": "0.1.0",
   "author": "maxhope",
-  "summary": null,
+  "summary": "Puppet module for creating chroot environments",
   "license": "Apache-2.0",
-  "source": "",
-  "project_page": null,
-  "issues_url": null,
+  "source": "https://github.com/maxhope/puppet-chroot",
+  "project_page": "https://github.com/maxhope/puppet-chroot",
+  "issues_url": "https://github.com/maxhope/puppet-chroot/issues",
   "dependencies": [
-    {"name":"puppetlabs-stdlib","version_requirement":">= 1.0.0"}
+    {"name":"puppetlabs-stdlib","version_requirement":">= 2.0.0 <4.7.0"}
+  ],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "CentOS",
+      "operatingsystemrelease": [
+        "6.0",
+        "7.0"
+      ]
+    },
+    {
+      "operatingsystem": "ArchLinux",
+      "operatingsystemrelease": [
+        "2015.07.01"
+      ]
+    }
   ]
 }
-
