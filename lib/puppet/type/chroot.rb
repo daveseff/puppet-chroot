@@ -29,7 +29,7 @@ Puppet::Type.newtype(:chroot) do
 
   validate do
     unless self[:name] and self[:path]
-      raise(Puppet::Error, "Both name and contents are required attributes")
+      raise(Puppet::Error, "Both name and path are required attributes")
     end
   end
 
