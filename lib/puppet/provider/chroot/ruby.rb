@@ -31,9 +31,24 @@ Puppet::Type.type(:chroot).provide(:ruby) do
     if File.file? exec
       FileUtils.copy_file(exec, path + exec)
     end
+
+    params = []
+        
+    unless userspec.empty?
+      us = '--userspec=' + userspec
+      params << us
+    end
+
+    unless groups.empty?
+      g = '--groups=' + groups
+      params << g
+    end
+
+    params << path
+    params << exec
     
     # Run the environment
-    chroot([path, exec])
+    chroot(params)
   end
 
   def destroy
