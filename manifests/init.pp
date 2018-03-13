@@ -60,10 +60,9 @@ class chroot(
       }->
       exec{'chroot_setup.sh':
         command     => '/tmp/chroot_setup.sh',
-        path        => ['/tmp'],
+        path        => ['/tmp', '/bin', '/usr/bin', ],
         user        => 'root',
         group       => 'root',
-        environment => ['PATH=/bin:/usr/bin'],
         unless      => '/usr/bin/test -f /tmp/chroot_setup',
         logoutput   => true,
       }->
