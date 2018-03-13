@@ -32,5 +32,4 @@ Puppet::Type.newtype(:chroot) do
       raise(Puppet::Error, "Both name and path are required attributes")
     end
   end
-
 end

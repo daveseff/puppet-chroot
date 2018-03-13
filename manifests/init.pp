@@ -66,7 +66,7 @@ class chroot(
         unless      => '/usr/bin/test -f /tmp/chroot_setup',
         logoutput   => true,
       }->
-      chroot {'/opt/mychroot':
+      chroot {$path:
         ensure   => $ensure,
         path     => $path,
         userspec => $userspec,
