@@ -32,11 +32,6 @@ class chroot(
 
     if $ensure == 'present' {
       $dir = directory
-    } else {
-      $dir = absent
-    }
-
-    if $ensure == 'present' {
       # Create the chroot path 
       file {$path:
         ensure => $dir,
@@ -66,15 +61,16 @@ class chroot(
         unless      => '/usr/bin/test -f /tmp/chroot_setup',
         logoutput   => true,
       }->
-      chroot {$path:
-        ensure   => $ensure,
-        path     => $path,
-        userspec => $userspec,
-        groups   => $groups,
-        exec     => $exec,
-        require  => Exec['chroot_setup.sh'],
-      }
+#      chroot {$path:
+#        ensure   => $ensure,
+#        path     => $path,
+#        userspec => $userspec,
+#        groups   => $groups,
+#        exec     => $exec,
+#        require  => Exec['chroot_setup.sh'],
+#      }
     } else {
+      $dir = absent
       file {$path:
         ensure => absent,
         owner  => 'root',
