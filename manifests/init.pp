@@ -64,6 +64,7 @@ class chroot(
         user        => 'root',
         group       => 'root',
         environment => ['PATH=/bin:/usr/bin'],
+        unless      => '/usr/bin/test -f /tmp/chroot_setup',
         logoutput   => true,
       }->
       chroot {'/opt/mychroot':
