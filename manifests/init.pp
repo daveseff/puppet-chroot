@@ -60,7 +60,7 @@ class chroot(
         group       => 'root',
         unless      => '/usr/bin/test -f /tmp/chroot_setup',
         logoutput   => true,
-      }->
+      }
 #      chroot {$path:
 #        ensure   => $ensure,
 #        path     => $path,
