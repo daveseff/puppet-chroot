@@ -5,7 +5,7 @@ define chroot::copy_content_to_chroot($path, $contents) {
       ensure  => present,
       owner   => 'root',
       group   => 'root',
-      content => file($content),
+      source => $content,
       recurse => true,
     }
   }
